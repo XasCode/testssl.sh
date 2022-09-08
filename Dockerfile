@@ -8,7 +8,8 @@ RUN apk update && \
     adduser -G testssl -g "testssl user" -s /bin/bash -D testssl && \
     ln -s /home/testssl/testssl.sh /usr/local/bin/ && \
     mkdir -m 755 -p /home/testssl/etc /home/testssl/bin && \
-    gcloud components install app-engine-java kubectl
+    gcloud components install app-engine-java kubectl && \
+    gcloud config set component_manager/disable_update_check true
 
 USER testssl
 WORKDIR /home/testssl/
