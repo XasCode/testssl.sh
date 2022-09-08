@@ -20,4 +20,4 @@ COPY --chown=testssl:testssl script.sh /home/testssl/
 
 RUN chmod +x /home/testssl/script.sh
 
-CMD ["/home/testssl/script.sh"]
+ENTRYPOINT ["/bin/bash","/home/testssl/script.sh"]
