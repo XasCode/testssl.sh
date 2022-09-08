@@ -9,14 +9,14 @@ RUN apk update && \
     ln -s /home/testssl/testssl.sh /usr/local/bin/ && \
     mkdir -m 755 -p /home/testssl/etc /home/testssl/bin
 
-RUN curl -sSL https://sdk.cloud.google.com | bash
-
-RUN /root/google-cloud-sdk/bin/gcloud config set component_manager/disable_update_check true
-
-ENV PATH $PATH:/root/google-cloud-sdk/bin
-
 USER testssl
 WORKDIR /home/testssl/
+
+RUN curl -sSL https://sdk.cloud.google.com | bash
+
+RUN /home/testssl/google-cloud-sdk/bin/gcloud config set component_manager/disable_update_check true
+
+ENV PATH $PATH:/home/testssl/google-cloud-sdk/bin
 
 COPY --chown=testssl:testssl etc/. /home/testssl/etc/
 COPY --chown=testssl:testssl bin/. /home/testssl/bin/
