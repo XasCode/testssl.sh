@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /home/testssl
+
 PROJECT=$(/home/testssl/google-cloud-sdk/bin/gcloud compute project-info describe | grep "name: " | sed --expression='s/name: //g')
 
 /home/testssl/google-cloud-sdk/bin/gsutil cp gs://${PROJECT}-results/queue/* ./

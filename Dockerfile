@@ -12,7 +12,7 @@ RUN apk update && \
 USER testssl
 WORKDIR /home/testssl/
 
-RUN curl -sSL https://sdk.cloud.google.com | bash
+RUN cd /home/testssl && curl -sSL https://sdk.cloud.google.com | bash
 
 RUN /home/testssl/google-cloud-sdk/bin/gcloud config set component_manager/disable_update_check true
 
