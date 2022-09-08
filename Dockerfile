@@ -2,12 +2,18 @@ FROM alpine:3.16
 
 RUN apk update && \
     apk upgrade && \
-    apk add bash procps drill git coreutils libidn curl socat openssl xxd && \
+    apk add --update bash procps drill git coreutils libidn python3 curl which socat openssl xxd && \
     rm -rf /var/cache/apk/* && \
     addgroup testssl && \
     adduser -G testssl -g "testssl user" -s /bin/bash -D testssl && \
     ln -s /home/testssl/testssl.sh /usr/local/bin/ && \
     mkdir -m 755 -p /home/testssl/etc /home/testssl/bin
+
+RUN curl -sSL https://sdk.cloud.google.com | bash
+
+RUN /root/google-cloud-sdk/bin/gcloud config set component_manager/disable_update_check true
+
+ENV PATH $PATH:/root/google-cloud-sdk/bin
 
 USER testssl
 WORKDIR /home/testssl/
@@ -15,7 +21,8 @@ WORKDIR /home/testssl/
 COPY --chown=testssl:testssl etc/. /home/testssl/etc/
 COPY --chown=testssl:testssl bin/. /home/testssl/bin/
 COPY --chown=testssl:testssl testssl.sh /home/testssl/
+COPY --chown=testssl:testssl script.sh /home/testssl/
 
-ENTRYPOINT ["testssl.sh"]
+RUN chmod +x /home/testssl/script.sh
 
-CMD ["--help"]
+CMD ["/home/testssl/script.sh"]
