@@ -7,17 +7,20 @@ RUN apk update && \
     addgroup testssl && \
     adduser -G testssl -g "testssl user" -s /bin/bash -D testssl && \
     ln -s /home/testssl/testssl.sh /usr/local/bin/ && \
-    mkdir -m 755 -p /home/testssl/etc /home/testssl/bin && \
-    gcloud components install app-engine-java kubectl && \
-    gcloud config set component_manager/disable_update_check true
+    mkdir -m 755 -p /home/testssl/etc /home/testssl/bin
 
 USER testssl
 WORKDIR /home/testssl/
+ENV HOME /home/testssl/
 
 COPY --chown=testssl:testssl etc/. /home/testssl/etc/
 COPY --chown=testssl:testssl bin/. /home/testssl/bin/
 COPY --chown=testssl:testssl testssl.sh /home/testssl/
 COPY --chown=testssl:testssl script.sh /home/testssl/
+
+RUN gcloud components install app-engine-java kubectl
+
+RUN gcloud config set component_manager/disable_update_check true
 
 RUN chmod +x /home/testssl/script.sh
 
