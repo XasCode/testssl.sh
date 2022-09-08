@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export PATH="$PATH:/root/google-cloud-sdk/bin"
+
 PROJECT=$(gcloud compute project-info describe | grep "name: " | sed --expression='s/name: //g')
 
 gsutil cp gs://${PROJECT}-results/queue/* ./
