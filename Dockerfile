@@ -1,22 +1,17 @@
-FROM alpine:3.16
+FROM gcr.io/google.com/cloudsdktool/google-cloud-cli:alpine
 
 RUN apk update && \
     apk upgrade && \
-    apk add --update bash procps drill git coreutils libidn python3 curl which socat openssl xxd && \
+    apk add --update openjdk7-jre bash procps drill git coreutils libidn python3 curl which socat openssl xxd && \
     rm -rf /var/cache/apk/* && \
     addgroup testssl && \
     adduser -G testssl -g "testssl user" -s /bin/bash -D testssl && \
     ln -s /home/testssl/testssl.sh /usr/local/bin/ && \
-    mkdir -m 755 -p /home/testssl/etc /home/testssl/bin
+    mkdir -m 755 -p /home/testssl/etc /home/testssl/bin && \
+    gcloud components install app-engine-java kubectl
 
 USER testssl
 WORKDIR /home/testssl/
-
-RUN cd /home/testssl && curl -sSL https://sdk.cloud.google.com | bash
-
-RUN /home/testssl/google-cloud-sdk/bin/gcloud config set component_manager/disable_update_check true
-
-ENV PATH $PATH:/home/testssl/google-cloud-sdk/bin
 
 COPY --chown=testssl:testssl etc/. /home/testssl/etc/
 COPY --chown=testssl:testssl bin/. /home/testssl/bin/
